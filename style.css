@@ -1,0 +1,17 @@
+.container {
+    display: grid; /*either grid or inline-grid creates an element into a grid container*/
+    /*with grid-template-columns and grid-template-rows we can easily define columns and row tracks.
+    we use px this time. For example 50px 50px creates two tracks and 50px 50px 50 px creates 3 tracks*/ 
+    grid-template-columns: 50px 50px;
+    grid-template-rows: 50px 50px;
+    /*we can use shorthand for grid-template-columns and grid-template-rows which is called grid-template: 50px 50px / 50px 50px 50px;
+    where rows are defined before slash and columns after the slash. The values dont have to be the same they can for exmaple be 50px 50px / 250px 50px 50px;*/
+    /* With grid-auto-rows and grid-auto-columns */
+    /*grid-auto-flow: column */
+    /*column-gap, row-gap, or shorthand gap defines the gap between rows and columns. gap rows first then column*/
+    gap: 100px 10px;
+}
+
+.container > div {
+    border: 1px solid blue;
+}
