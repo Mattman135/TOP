@@ -1,17 +1,57 @@
+/*make use of grid positioning. grid-column-start, grid-column-end, grid-row-start, grid-row-end*/
+/*open developer tools and go to layout pane and click grid overlay display setting, now you can see the numbers that shows where each column and row starts and ends
+make use of this when using grid-column-start etc*/
+/* we can combine grid-row-start / grid-column-start / grid-row-end / grid-column-end with grid-area for example*/ 
+/* one can use grid-area for a few different things for example create visual laytout of the grid in words
+to do this use grid-template-areas for example in .container write:
+grid-template-areas:
+    "living-room living-room living-room living-room living-room"
+    "living-room living-room living-room living-room living-room"
+    "bedroom bedroom bathroom kitchen kitchen"
+    "bedroom bedroom bathroom kitchen kitchen"
+    "closet closet . . ."*/
 .container {
-    display: grid; /*either grid or inline-grid creates an element into a grid container*/
-    /*with grid-template-columns and grid-template-rows we can easily define columns and row tracks.
-    we use px this time. For example 50px 50px creates two tracks and 50px 50px 50 px creates 3 tracks*/ 
-    grid-template-columns: 50px 50px;
-    grid-template-rows: 50px 50px;
-    /*we can use shorthand for grid-template-columns and grid-template-rows which is called grid-template: 50px 50px / 50px 50px 50px;
-    where rows are defined before slash and columns after the slash. The values dont have to be the same they can for exmaple be 50px 50px / 250px 50px 50px;*/
-    /* With grid-auto-rows and grid-auto-columns */
-    /*grid-auto-flow: column */
-    /*column-gap, row-gap, or shorthand gap defines the gap between rows and columns. gap rows first then column*/
-    gap: 100px 10px;
+    display: inline-grid;
+    grid-template: 40px 40px 40px 40px 40px / 40px 40px 40px 40px 40px;
+    background-color: lightblue; 
 }
 
-.container > div {
-    border: 1px solid blue;
+.room {
+    border: 1px solid;
+    font-size: 50%;
+    text-align: center;
+}
+
+#living-room {
+    /*grid-column-start: 1;
+    grid-column-end: 6;
+    grid-row-start: 1;
+    grid-row-end: 3;*/
+    grid-area: 1 / 1 / 3 / 6;
+}
+
+#kitchen {
+    grid-column: 4 / 6;
+    grid-row: 3 / 6;
+}
+
+#bedroom {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 5;
+}
+
+#bathroom {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 3;
+    grid-row-end: 6;
+}
+
+#closet {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 5;
+    grid-row-end: 6;
 }
