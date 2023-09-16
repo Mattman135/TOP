@@ -1,95 +1,59 @@
-// LESSON: OBJECTS AND OBJECT CONSTRUCTORS
+// LESSON: FACTORY FUNCTIONS AND MODULE PATTERNS
 
-// First exercise
-function Book(title, author, pages, read) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-    this.info = function() {
-        return title + author + ", " + pages + "pages, " + read;
-    }
+// Quickly put: factory functions look like constructors but use return, instead of having to use the new keyword.
+// Factory functions do not utilize the prototype. This comes with a performance penalty. This penalty is mostly apparent
+// when you're creating thousands of objects
+// An example:
+
+const personFactory = (name, age) => {
+    const sayHello = () => console.log("hello");
+    return {name, age, sayHello};
 }
 
-const book = new Book("The Hobbit by J.R.R.", "Tolkien", 295, "not read yet");
-console.log(book.info());
+const jeff = personFactory("jeff", 27);
 
-// Above creates an object Book with its variables. The Lower creates a new Book and declares its variables. 
-// Note that in functions one should always try and use return rather than console log in the function.
-// Why? Not sure exactly but its almost always the best practice.
-// Return and then console log the return value is best practice.
+console.log(jeff.name);
+jeff.sayHello();
 
-// Book is called an object constructor and its used when we need to duplicate objects. In this case we can have many different books.
-// Otherwise we would need to reuse the Book code for each book and that takes to much space and time.
+// there is another condense way to write this. if the object you're creating has the same name as object property you can write like this:
+// return {name: name, age: age, sayHello: sayHello}
+// return {name, age, sayHello};
 
 
-// THE PROTOTYPE
-// All objects inherits from the prototype object
+// scope and context
+// scope === variable access
+// context === this, value of this
 
+// closure: this is the concept that functions retain their scope even if they are passed around and called outside of that scope
 
-//PROTOTYPAL INHERITANCE
-// Object.setPrototypeOf(Player.prototype, Person.prototype)
-// Object.getPrototypeOf(Player.prototype) // returns Person.prototype
-// This makes Player object inherit from Person object.
-// Remember setPrototypeOf, and getPrototypeOf
+const Player = (name, level) => {
+    let health = level * 2;
+    const getLevel = () => level;
+    const getName  = () => name;
+    const die = () => {
+      // uh oh
+    };
+    const damage = x => {
+      health -= x;
+      if (health <= 0) {
+        die();
+      }
+    };
+    const attack = enemy => {
+      if (level < enemy.getLevel()) {
+        damage(1);
+        console.log(`${enemy.getName()} has damaged ${name}`);
+      }
+      if (level >= enemy.getLevel()) {
+        enemy.damage(1);
+        console.log(`${name} has damaged ${enemy.getName()}`);
+      }
+    };
+    return {attack, damage, getLevel, getName};
+};
+  
+const jimmie = Player('jim', 10);
+const badGuy = Player('jeff', 5);
+jimmie.attack(badGuy);
 
-
-// A constructor is in the beginning just a regular function but it becomes a constructor when we use the 
-// new keywoard. 
-
-// Another example: warriors with different abilities. They share a couple of things like name and level
-// but differ in their abilities. Now we can make use of classes and they will inherit name and level from Hero 
-// while the abilities needs a new class
-
-function Hero(name, level) {
-    this.name = name;
-    this.level = level;
-}
-
-let hero1 = new Hero("Björn", 1); // at this point Hero becomes a constructor
-console.log(hero1);
-console.log(Object.getPrototypeOf(hero1));
-
-// this is how we can create a function called greet and add it to Hero
-Hero.prototype.greet = function () {
-    return `${this.name} says hello.`;
-}
-// we now say that greet is in the prototype of Hero
-
-console.log(hero1.greet());
-
-// Initialize Warrior constructor
-function Warrior(name, level, weapon) {
-  // Chain constructor with call
-  Hero.call(this, name, level);
-
-  // Add a new property
-  this.weapon = weapon;
-}
-
-// Initialize Healer constructor
-function Healer(name, level, spell) {
-  Hero.call(this, name, level);
-
-  this.spell = spell;
-}
-Warrior.prototype.attack = function () {
-    return `${this.name} attacks with the ${this.weapon}.`;
-}
-
-Healer.prototype.heal = function () {
-    return `${this.name} casts ${this.spell}.`;
-}
-
-const hero3 = new Warrior ("Gustaf", 1, "axe");
-const hero2 = new Healer('Kanin', 1, 'cure');
-console.log(hero3.attack());
-
-// right now hero3 and hero2 dont have the greet function and they need to inherit it from Hero
-//console.log(hero3.greet()) // this will not work rn
-
-// we need to use Object.setPropertyOf() to link the properties in the Hero constructor to the Warrior and Healer contructors
-Object.setPrototypeOf(Warrior.prototype, Hero.prototype); // now Warrior inherits from Hero and we can use the greet function for hero3
-Object.setPrototypeOf(Healer.prototype, Hero.prototype);
-
-console.log(hero3.greet());
+jimmie.die(); // this is not exposed publicly so we get an error
